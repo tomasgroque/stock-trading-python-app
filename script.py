@@ -1,18 +1,18 @@
 import requests
-import openai
 import os
 from dotenv import load_dotenv
 import csv
 load_dotenv()
+import snowflake.connector
+from datetime import datetime
 
 POLYGON_API_KEY = os.getenv('POLYGON_API_KEY')
 LIMIT = 1000
 
 def run_stock_job():
+    DS = datetime.now().strftime('%Y-%m-%d')
     url = f"https://api.polygon.io/v3/reference/tickers?market=stocks&active=true&order=asc&limit={LIMIT}&sort=ticker&apiKey={POLYGON_API_KEY}"
-
     response = requests.get(url)
-
     tickers = []
     raw_data = response.json()
     data = raw_data['results']
